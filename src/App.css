@@ -1,0 +1,49 @@
+.box {
+  display: inline-block;
+  border: 1px solid black;
+  width: 50px;
+  height: 50px;
+  margin-right: -1px;
+  margin-bottom: -1px;
+  margin-top: -1px;
+  margin-left: -1px;
+}
+
+.center {
+  margin: auto;
+  display: table;
+  margin-top: 10px;
+}
+
+.grid {
+  width: 150px;
+  line-height: 0;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.visitedCell {
+  background-color: blueviolet;
+}
+
+.active {
+  background-color: rgb(91, 6, 117);
+}
+
+.startBtn {
+  margin: auto;
+  display: table;
+  padding: 10px;
+  outline: none;
+  border: none;
+  box-shadow: 3px 3px 5px rgb(165, 139, 197);
+  background: darkviolet;
+  color: white;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.startBtn:active {
+  box-shadow: 0 0 0;
+}
