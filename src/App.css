@@ -30,6 +30,21 @@
   background-color: rgb(91, 6, 117);
 }
 
+.solver {
+  background-color: rgba(21, 100, 32, 0.651);
+}
+
+.finished
+{
+  background-color: rgb(212, 56, 9);
+}
+
+.path
+{
+  background-color: rgb(27, 201, 27);
+
+}
+
 .startBtn {
   margin: auto;
   display: table;

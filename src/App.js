@@ -4,6 +4,9 @@ import "./App.css";
 let newCurr = "";
 let first = true;
 let stack = [];
+let solvestack = [];
+
+let cell = "(0,0)"
 
 class Box extends Component {
   render() {
@@ -22,7 +25,7 @@ class Grid extends Component {
   rowsArr = [];
   visited = new Set();
   width = this.props.cols * 50;
-
+  drawpathid = null;
   createGrid = () => {
     for (var j = 0; j < this.props.rows; j++) {
       for (var i = 0; i < this.props.cols; i++) {
@@ -36,6 +39,16 @@ class Grid extends Component {
     let start = "(0,0)";
     this.intervalId = setInterval(() => this.draw(start), this.props.speed);
   };
+
+  solveButton = () => {
+    console.log("sove Maze called");
+    clearInterval(this.solveinterval);
+    let start = "(0,0)";  
+    this.visited.clear();
+    console.log(this.visited);
+
+    this.solveinterval = setInterval(() => this.solve(start), this.props.speed);
+  }
 
   parseLocation = stringCoordinates => {
     let values = stringCoordinates.split(",");
@@ -138,7 +151,13 @@ class Grid extends Component {
     if (!first) {
       if (stack.length === 0) {
         clearInterval(this.intervalId);
+      
+        this.visited.clear();
+       
       }
+      //clear visited
+      
+      
     }
 
     //get current
@@ -193,6 +212,151 @@ class Grid extends Component {
     //curr = next
   };
 
+  getSolveNeightbour = (currentCell, visited) =>
+  {
+    let temp = this.parseLocation(currentCell);
+    let i = temp[0];
+    let j = temp[1];
+    let top = undefined,
+      bottom = undefined,
+      right = undefined,
+      left = undefined;
+      
+
+    if (!visited.has(`(${i - 1},${j})`)) {
+      left = this.rowsArr[this.index(i - 1, j)];
+      
+    }
+    if (!visited.has(`(${i},${j + 1})`)) {
+      bottom = this.rowsArr[this.index(i, j + 1)];
+
+    }
+    if (!visited.has(`(${i + 1},${j})`)) {
+      right = this.rowsArr[this.index(i + 1, j)];
+
+    }
+    if (!visited.has(`(${i},${j - 1})`)) {
+      top = this.rowsArr[this.index(i, j - 1)];
+
+    }
+
+    let neighbors = [];
+    let tempCell;
+    if (top) {
+      //top must have
+      tempCell = top.props.id;
+      tempCell = document.getElementById(tempCell);
+      if(tempCell.style.borderBottom === "1px solid rgba(0, 0, 0, 0)")
+      {
+        
+        neighbors.push(top);
+      }
+
+    }
+
+    if (right) {
+      tempCell = right.props.id;
+      tempCell = document.getElementById(tempCell);
+      if(tempCell.style.borderLeft === "1px solid rgba(0, 0, 0, 0)")
+      {
+       neighbors.push(right);        
+      }
+      
+    }
+
+    if (bottom) {
+      tempCell = bottom.props.id;
+      tempCell = document.getElementById(tempCell);
+      if(tempCell.style.borderTop === "1px solid rgba(0, 0, 0, 0)")
+      {
+        
+        neighbors.push(bottom);        
+      }
+
+    }
+
+    if (left) {
+      tempCell = left.props.id;
+      tempCell = document.getElementById(tempCell);
+      if(tempCell.style.borderRight === "1px solid rgba(0, 0, 0, 0)")
+      {
+        
+        neighbors.push(left);        
+      }
+
+    }
+    if(neighbors[0])
+    {
+      return neighbors[0].props.id;    
+
+    }
+    else
+    {
+      return null;
+    }
+
+  }
+
+  //will solve the maze
+  solve = () =>
+  {
+    // let currentCell = document.getElementById(cell);
+    let parent = document.querySelectorAll(".box");
+    for (let k = 0; k < parent.length; k++) {
+      parent[k].classList.remove("solver");
+    }
+    this.visited.add(cell);
+    
+    let nextCell= this.getSolveNeightbour(cell, this.visited);
+    if(nextCell === `(${this.props.rows - 1},${this.props.cols-1})`)
+    {
+      // console.log("solvestack ",solvestack);
+
+      console.log("Maze Solved");
+      nextCell = document.getElementById(nextCell);
+      nextCell.className += " finished";
+      this.drawpathid = setInterval(() => this.drawPath(solvestack),this.props.speed);
+      clearInterval(this.solveinterval);
+
+    }
+    if(nextCell === null)
+    {
+      console.log("backtrack");
+      cell = solvestack.pop();
+      
+    }
+    else
+    {
+      // console.log(nextCell);
+      solvestack.push(cell)
+      cell = nextCell;
+    }
+
+    //make cell active
+    let currentCell = document.getElementById(cell);
+    if(currentCell)
+      currentCell.className += " solver";
+  }
+
+  drawPath = (solvestack) =>
+  {
+    if(solvestack.length === 1)
+    {
+      console.log("Path traced");
+      clearInterval(this.drawpathid);
+    }
+    else
+    {
+      let curr = solvestack.pop();
+      curr = document.getElementById(curr);
+      curr.className += " path";
+    }
+    
+    
+    
+
+  } 
+
   componentDidMount() {
     // this.playButton();
   }
@@ -204,6 +368,9 @@ class Grid extends Component {
         <button className="startBtn" onClick={this.playButton}>
           Generate Maze
         </button>
+        <button className="startBtn" onClick={this.solveButton}>
+          Solve Maze
+        </button>
         {this.rowsArr}
       </div>
     );
@@ -213,7 +380,7 @@ class Grid extends Component {
 class App extends Component {
   constructor() {
     super();
-    this.speed = 100;
+    this.speed = 50;
     this.rows = 10;
     this.cols = 10;
   }
