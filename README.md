@@ -2,6 +2,9 @@
     
 A simple maze generator, built with React.
 
+## Generated Maze
+![](https://github.com/Srtpatil/Maze-Generator-React/blob/master/Maze.png)
+
 ## How does it work?
 
 The generator uses [recursive backtracking](http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking) to generate a maze. The algorithm can be described as listed below.
