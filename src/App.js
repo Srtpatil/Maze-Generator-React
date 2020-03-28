@@ -34,6 +34,11 @@ class Grid extends Component {
     }
   };
 
+  state = 
+  {
+    generatedMaze : false
+  }
+
   playButton = () => {
     clearInterval(this.intervalId);
     let start = "(0,0)";
@@ -150,11 +155,14 @@ class Grid extends Component {
     //stops the loop
     if (!first) {
       if (stack.length === 0) {
+        this.setState({
+          generatedMaze : true
+        })
         clearInterval(this.intervalId);
       
         this.visited.clear();
-       
-      }
+
+      } 
       //clear visited
       
       
@@ -357,18 +365,20 @@ class Grid extends Component {
 
   } 
 
-  componentDidMount() {
-    // this.playButton();
-  }
-
   render() {
+    let solveBtnClass = "startBtn";
+
+    if(!this.state.generatedMaze)
+    {
+      solveBtnClass += " disableBtn";
+    }
     this.createGrid();
     return (
       <div className="grid" style={{ width: this.width }}>
         <button className="startBtn" onClick={this.playButton}>
           Generate Maze
         </button>
-        <button className="startBtn" onClick={this.solveButton}>
+        <button className={solveBtnClass} onClick={this.solveButton} disabled={!this.state.generatedMaze}>
           Solve Maze
         </button>
         {this.rowsArr}

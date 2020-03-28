@@ -23,7 +23,7 @@
 }
 
 .visitedCell {
-  background-color: blueviolet;
+  background-color: rgba(137, 43, 226);
 }
 
 .active {
@@ -31,19 +31,21 @@
 }
 
 .solver {
-  background-color: rgba(21, 100, 32, 0.651);
+  background-color: rgba(21, 100, 32);
 }
 
 .finished
 {
-  background-color: rgb(212, 56, 9);
+  background-color: rgb(189, 65, 28);
 }
 
 .path
 {
-  background-color: rgb(27, 201, 27);
+  background-color: rgb(38, 194, 38);
 
 }
+
+
 
 .startBtn {
   margin: auto;
@@ -61,4 +63,9 @@
 
 .startBtn:active {
   box-shadow: 0 0 0;
+}
+
+.disableBtn
+{
+  background: rgb(170, 158, 158);
 }
